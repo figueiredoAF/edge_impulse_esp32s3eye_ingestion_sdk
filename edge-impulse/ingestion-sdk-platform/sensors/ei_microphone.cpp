@@ -527,10 +527,11 @@ static int i2s_init(uint32_t sampling_rate) {
       .fixed_mclk = -1,
   };
   i2s_pin_config_t pin_config = {
-      .bck_io_num = 26,    // IIS_SCLK
-      .ws_io_num = 32,     // IIS_LCLK
-      .data_out_num = -1,  // IIS_DSIN
-      .data_in_num = 33,   // IIS_DOUT
+      .mck_io_num = I2S_PIN_NO_CHANGE,
+      .bck_io_num = 41,                  // IIS_SCLK
+      .ws_io_num = 42,                   // IIS_LCLK
+      .data_out_num = I2S_PIN_NO_CHANGE, // IIS_DSIN
+      .data_in_num = 2                   // IIS_DOUT
   };
   esp_err_t ret = 0;
 

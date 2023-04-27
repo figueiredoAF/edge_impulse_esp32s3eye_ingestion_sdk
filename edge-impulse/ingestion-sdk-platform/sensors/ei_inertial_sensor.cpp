@@ -29,27 +29,24 @@
 #include "edge-impulse-sdk/porting/ei_classifier_porting.h"
 #include "edge-impulse-sdk/porting/ei_logging.h"
 
-#include "LIS3DHTR.h"
+
+#include "qma7981.h"
 
 /* Constant defines -------------------------------------------------------- */
 #define CONVERT_G_TO_MS2    9.80665f
 
 static float imu_data[INERTIAL_AXIS_SAMPLED];
 
-LIS3DHTR lis;
-
 bool ei_inertial_init(void) {
 
-    lis.begin(LIS3DHTR_DEFAULT_ADDRESS);
-
-    if(lis.isConnection() == false) {
+    if(qma7981_init()) {
         EI_LOGW("Failed to connect to Inertial sensor!\n");
         return false;
     }
 
     ei_sleep(100);
-    lis.setFullScaleRange(LIS3DHTR_RANGE_2G);
-    lis.setOutputDataRate(LIS3DHTR_DATARATE_100HZ);
+    qma7981_set_range(QMA_RANGE_2G);
+    qma7981_set_badwidth(QMA_BANDWIDTH_128_HZ);
 
     if(ei_add_sensor_to_fusion_list(inertial_sensor) == false) {
         EI_LOGE("Failed to register Inertial sensor!\n");
@@ -62,7 +59,7 @@ bool ei_inertial_init(void) {
 float *ei_fusion_inertial_read_data(int n_samples)
 {
     
-    lis.getAcceleration(&imu_data[0], &imu_data[1], &imu_data[2]);
+    qma7981_get_acce(&imu_data[0], &imu_data[1], &imu_data[2]);
     imu_data[0] *= CONVERT_G_TO_MS2;
     imu_data[1] *= CONVERT_G_TO_MS2;
     imu_data[2] *= CONVERT_G_TO_MS2;

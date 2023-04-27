@@ -1286,6 +1286,18 @@ CONFIG_WPA_MBEDTLS_CRYPTO=y
 # end of Supplicant
 
 #
+# Bus Options
+#
+
+#
+# I2C Bus Options
+#
+CONFIG_I2C_BUS_DYNAMIC_CONFIG=y
+CONFIG_I2C_MS_TO_WAIT=200
+# end of I2C Bus Options
+# end of Bus Options
+
+#
 # Camera configuration
 #
 CONFIG_OV7670_SUPPORT=y

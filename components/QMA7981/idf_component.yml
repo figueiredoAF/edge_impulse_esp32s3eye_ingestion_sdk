@@ -1,0 +1,4 @@
+description: ESP32 compatible driver for QMA7981 three-axis accelerometer.
+targets:
+  - esp32
+  - esp32s3
