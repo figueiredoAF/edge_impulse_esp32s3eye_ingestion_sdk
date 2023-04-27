@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+#define EI_PORTING_ESPRESSIF      1
+
 /* Include ----------------------------------------------------------------- */
 #include "driver/gpio.h"
 #include "sdkconfig.h"
@@ -44,14 +46,19 @@ static ATServer *at;
 
 extern "C" int app_main()
 {
-    gpio_pad_select_gpio(GPIO_NUM_21);
-    gpio_reset_pin(GPIO_NUM_21);
+//    gpio_pad_select_gpio(GPIO_NUM_21);
+//    gpio_reset_pin(GPIO_NUM_21);
+//
+//    gpio_pad_select_gpio(GPIO_NUM_22);
+//    gpio_reset_pin(GPIO_NUM_22);    
+//    
+//    gpio_set_direction(GPIO_NUM_21, GPIO_MODE_OUTPUT);
+//    gpio_set_direction(GPIO_NUM_22, GPIO_MODE_OUTPUT);
 
-    gpio_pad_select_gpio(GPIO_NUM_22);
-    gpio_reset_pin(GPIO_NUM_22);    
-    
-    gpio_set_direction(GPIO_NUM_21, GPIO_MODE_OUTPUT);
-    gpio_set_direction(GPIO_NUM_22, GPIO_MODE_OUTPUT);    
+    // Gree LED ESP32-S3-Eye
+    gpio_pad_select_gpio(GPIO_NUM_3);
+    gpio_reset_pin(GPIO_NUM_3); 
+    gpio_set_direction(GPIO_NUM_3, GPIO_MODE_OUTPUT);
 
     /* Initialize Edge Impulse sensors and commands */
 

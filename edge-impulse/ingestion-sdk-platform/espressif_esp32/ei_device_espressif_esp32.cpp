@@ -41,10 +41,13 @@
 #include <freertos/timers.h>
 
 /* Constants --------------------------------------------------------------- */
-#define EI_RED_LED_OFF      gpio_set_level(GPIO_NUM_21, 0);
-#define EI_WHITE_LED_OFF    gpio_set_level(GPIO_NUM_22, 0);
-#define EI_RED_LED_ON     gpio_set_level(GPIO_NUM_21, 1);
-#define EI_WHITE_LED_ON    gpio_set_level(GPIO_NUM_22, 1);
+//#define EI_RED_LED_OFF      gpio_set_level(GPIO_NUM_21, 0);
+//#define EI_WHITE_LED_OFF    gpio_set_level(GPIO_NUM_22, 0);
+//#define EI_RED_LED_ON     gpio_set_level(GPIO_NUM_21, 1);
+//#define EI_WHITE_LED_ON    gpio_set_level(GPIO_NUM_22, 1);
+
+#define EI_WHITE_LED_ON    gpio_set_level(GPIO_NUM_3, 1);
+#define EI_WHITE_LED_OFF    gpio_set_level(GPIO_NUM_3, 0);
 
 /** Global objects */
 TimerHandle_t fusion_timer;
@@ -142,27 +145,27 @@ void EiDeviceESP32::set_state(EiState state)
         EI_WHITE_LED_ON;
         break;
     case eiStateSampling:
-        EI_RED_LED_ON;
+        //EI_RED_LED_ON;
         delay_ms(100);
-        EI_RED_LED_OFF;
+        //EI_RED_LED_OFF;
         delay_ms(100);          
         break;
     case eiStateUploading:
-        EI_RED_LED_ON;    
+        //EI_RED_LED_ON;    
         EI_WHITE_LED_ON;
         break;
     case eiStateFinished:
         for (int i = 0; i < 4; i++) {    
-            EI_RED_LED_ON;
+            //EI_RED_LED_ON;
             EI_WHITE_LED_ON;
             delay_ms(100);
-            EI_RED_LED_OFF;
+            //EI_RED_LED_OFF;
             EI_WHITE_LED_OFF;
             delay_ms(100);            
         }                                
         break;                
     default:
-        EI_RED_LED_OFF;
+        //EI_RED_LED_OFF;
         EI_WHITE_LED_OFF;
     }
 }
