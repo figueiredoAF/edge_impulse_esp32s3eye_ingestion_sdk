@@ -16,7 +16,7 @@
  */
 
 #include "../ei_classifier_porting.h"
-//#if EI_PORTING_ESPRESSIF == 1
+#if EI_PORTING_ESPRESSIF == 1
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -92,4 +92,4 @@ __attribute__((weak)) void DebugLog(const char* s) {
     ei_printf("%s", s);
 }
 
-//#endif // EI_PORTING_ESPRESSIF == 1
+#endif // EI_PORTING_ESPRESSIF == 1

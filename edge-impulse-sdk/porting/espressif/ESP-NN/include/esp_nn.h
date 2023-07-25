@@ -14,7 +14,9 @@
 
 #pragma once
 
-#if defined(EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN)
+#include "sdkconfig.h"
+
+#if defined(CONFIG_NN_OPTIMIZED)
 // select apt optimisations
 #ifdef CONFIG_IDF_TARGET_ESP32S3
 #define ARCH_ESP32_S3 1
@@ -31,7 +33,7 @@ extern "C" {
 /* reference kernels included by default */
 #include "esp_nn_ansi_headers.h"
 
-#if defined(EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN)
+#if defined(CONFIG_NN_OPTIMIZED)
 #if defined(ARCH_ESP32_S3)
 #include "esp_nn_esp32s3.h"
 #else // for other platforms use generic optimisations

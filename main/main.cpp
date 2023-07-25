@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-#define EI_PORTING_ESPRESSIF      1
-
 /* Include ----------------------------------------------------------------- */
 #include "driver/gpio.h"
 #include "sdkconfig.h"

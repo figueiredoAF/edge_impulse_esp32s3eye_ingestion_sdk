@@ -226,17 +226,20 @@ static esp_err_t camera_probe(const camera_config_t *config, camera_model_t *out
 
 esp_err_t esp_camera_init(const camera_config_t *config)
 {
+    ESP_LOGI(TAG, "[esp_camera_init] START \n");
     esp_err_t err;
+    ESP_LOGI(TAG, "[esp_camera_init] calling cam_init \n");
     err = cam_init(config);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Camera init failed with error 0x%x", err);
+        ESP_LOGE(TAG, "[esp_camera_init] Camera init failed with error 0x%x", err);
         return err;
     }
 
     camera_model_t camera_model = CAMERA_NONE;
+    ESP_LOGI(TAG, "[esp_camera_init] calling camera_probe \n");
     err = camera_probe(config, &camera_model);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Camera probe failed with error 0x%x(%s)", err, esp_err_to_name(err));
+        ESP_LOGE(TAG, "[esp_camera_init] Camera probe failed with error 0x%x(%s)", err, esp_err_to_name(err));
         goto fail;
     }
 
@@ -244,16 +247,17 @@ esp_err_t esp_camera_init(const camera_config_t *config)
     pixformat_t pix_format = (pixformat_t) config->pixel_format;
 
     if (PIXFORMAT_JPEG == pix_format && (!camera_sensor[camera_model].support_jpeg)) {
-        ESP_LOGE(TAG, "JPEG format is not supported on this sensor");
+        ESP_LOGE(TAG, "[esp_camera_init] JPEG format is not supported on this sensor");
         err = ESP_ERR_NOT_SUPPORTED;
         goto fail;
     }
 
     if (frame_size > camera_sensor[camera_model].max_size) {
-        ESP_LOGW(TAG, "The frame size exceeds the maximum for this sensor, it will be forced to the maximum possible value");
+        ESP_LOGW(TAG, "[esp_camera_init] The frame size exceeds the maximum for this sensor, it will be forced to the maximum possible value");
         frame_size = camera_sensor[camera_model].max_size;
     }
 
+    ESP_LOGI(TAG, "[esp_camera_init] calling cam_config: frame_size=%d \n", frame_size);
     err = cam_config(config, frame_size, s_state->sensor.id.PID);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "Camera config failed with error 0x%x", err);
@@ -262,15 +266,19 @@ esp_err_t esp_camera_init(const camera_config_t *config)
 
     s_state->sensor.status.framesize = frame_size;
     s_state->sensor.pixformat = pix_format;
+    ESP_LOGI(TAG, "[esp_camera_init] Setting frame size to %dx%d", resolution[frame_size].width, resolution[frame_size].height);
     ESP_LOGD(TAG, "Setting frame size to %dx%d", resolution[frame_size].width, resolution[frame_size].height);
     if (s_state->sensor.set_framesize(&s_state->sensor, frame_size) != 0) {
         ESP_LOGE(TAG, "Failed to set frame size");
         err = ESP_ERR_CAMERA_FAILED_TO_SET_FRAME_SIZE;
         goto fail;
     }
+
+    ESP_LOGI(TAG, "[esp_camera_init] Setting pixformat: pix_format=%d \n", pix_format);
     s_state->sensor.set_pixformat(&s_state->sensor, pix_format);
 
     if (s_state->sensor.id.PID == OV2640_PID) {
+        ESP_LOGI(TAG, "[esp_camera_init] Setting gainceiling, bpc, wpc and lenc \n");
         s_state->sensor.set_gainceiling(&s_state->sensor, GAINCEILING_2X);
         s_state->sensor.set_bpc(&s_state->sensor, false);
         s_state->sensor.set_wpc(&s_state->sensor, true);
@@ -278,16 +286,21 @@ esp_err_t esp_camera_init(const camera_config_t *config)
     }
 
     if (pix_format == PIXFORMAT_JPEG) {
+        ESP_LOGI(TAG, "[esp_camera_init] Setting jpeg_quality: %d \n", config->jpeg_quality);
         s_state->sensor.set_quality(&s_state->sensor, config->jpeg_quality);
     }
     s_state->sensor.init_status(&s_state->sensor);
 
+    ESP_LOGI(TAG, "[esp_camera_init] calling cam_start \n");
     cam_start();
 
+    ESP_LOGI(TAG, "[esp_camera_init] END: SUCCESS \n");
     return ESP_OK;
 
 fail:
+    ESP_LOGI(TAG, "[esp_camera_init] ERROR - calling  esp_camera_deinit\n");
     esp_camera_deinit();
+    ESP_LOGI(TAG, "[esp_camera_init] END: ERROR \n");
     return err;
 }
 

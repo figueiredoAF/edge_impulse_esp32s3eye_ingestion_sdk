@@ -33,6 +33,7 @@
 #include "firmware-sdk/at_base64_lib.h"
 #include "firmware-sdk/ei_device_interface.h"
 #include "firmware-sdk/ei_image_lib.h"
+#include "ei_device_espressif_esp32.h"
 
 // *********************************** AT cmd functions ***************
 
@@ -173,11 +174,11 @@ ei_camera_take_snapshot_output_on_serial(size_t width, size_t height, bool use_m
 extern bool ei_camera_start_snapshot_stream(size_t width, size_t height, bool use_max_baudrate)
 {
     bool isOK = true;
-    ei_printf("Starting snapshot stream...\n");
+    ei_printf("[ei_camera_start_snapshot_stream] Starting snapshot stream...\n");
     auto camera = EiCamera::get_camera();
 
     if (!camera->init(width, height)) {
-        ei_printf("Failed to init camera\n");
+        ei_printf("[ei_camera_start_snapshot_stream] Failed to init camera\n");
         return false;
     }
 
@@ -185,15 +186,27 @@ extern bool ei_camera_start_snapshot_stream(size_t width, size_t height, bool us
         respond_and_change_to_max_baud();
     }
 
-    while (!ei_user_invoke_stop_lib()) {
+    for (auto i = 0; i < 1; i++) {
+    // while (!ei_user_invoke_stop()) {
+    //while (!ei_user_invoke_stop_lib()) {
+        //ei_printf("[ei_camera_start_snapshot_stream] waiting ei_user_invoke_stop_lib \n");
         isOK &= ei_camera_take_snapshot_encode_and_output_no_init(width, height);
         ei_printf("\r\n");
     }
+
+    do {
+        isOK &= ei_camera_take_snapshot_encode_and_output_no_init(width, height);
+        ei_printf("\r\n");
+        ei_sleep(10);
+    }
+    while (!ei_user_invoke_stop());
+
     camera->deinit();
 
     if (use_max_baudrate) {
         change_to_normal_baud();
     }
 
+    ei_printf("[ei_camera_start_snapshot_stream] END status: %d \n", isOK);
     return isOK;
 }

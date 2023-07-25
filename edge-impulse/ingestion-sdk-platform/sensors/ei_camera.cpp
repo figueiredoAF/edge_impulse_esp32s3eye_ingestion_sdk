@@ -137,36 +137,45 @@ bool EiCameraESP32::set_resolution(const ei_device_snapshot_resolutions_t res) {
 // see README, need to close and re open for certain operations
 bool EiCameraESP32::init(uint16_t width, uint16_t height)
 {
+    ei_printf("[EiCameraESP32::init] START \n");
     ei_device_snapshot_resolutions_t res = search_resolution(width, height);
+    ei_printf("[EiCameraESP32::init] setting resolution: w=%u | h=%u \n", res.width, res.height);
     set_resolution(res);
 
     //initialize the camera
+    ei_printf("[EiCameraESP32::init] calling esp_camera_init \n");
     esp_err_t err = esp_camera_init(&camera_config);
 
     if (err != ESP_OK)
     {
-        ei_printf("ERR: Camera init failed\n");
+        ei_printf("[EiCameraESP32::init] ERR: Camera init failed\n");
         return false;
     }
 
+    ei_printf("[EiCameraESP32::init] calling esp_camera_sensor_get \n");
     sensor_t *s = esp_camera_sensor_get();
+    ei_printf("[EiCameraESP32::init] setting sensor vflip \n");
     s->set_vflip(s, 1);
+    ei_printf("[EiCameraESP32::init] setting sensor hmirror \n");
     s->set_hmirror(s, 1);
+    ei_printf("[EiCameraESP32::init] setting sensor awb_gain \n");
     s->set_awb_gain(s, 1);
 
     // camera warm-up to avoid wrong WB
     ei_sleep(10);
+    ei_printf("[EiCameraESP32::init] camera warm-up to avoid wrong WB \n");
     for (uint8_t i = 0; i < 7; i++) {
         camera_fb_t *fb = esp_camera_fb_get();
 
         if (!fb) {
-            ei_printf("ERR: Camera capture failed during warm-up \n");
+            ei_printf("[EiCameraESP32::init] ERR: Camera capture failed during warm-up \n");
             return false;
     }
 
     esp_camera_fb_return(fb);
     }
 
+    ei_printf("[EiCameraESP32::init] END: SUCCESS \n");
     return true;
 }
 

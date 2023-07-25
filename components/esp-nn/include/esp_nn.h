@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include "sdkconfig.h"
+
 #if defined(CONFIG_NN_OPTIMIZED)
 // select apt optimisations
 #ifdef CONFIG_IDF_TARGET_ESP32S3

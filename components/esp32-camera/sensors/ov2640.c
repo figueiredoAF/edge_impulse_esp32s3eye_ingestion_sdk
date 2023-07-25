@@ -203,8 +203,10 @@ static int set_window(sensor_t *sensor, ov2640_sensor_mode_t mode, int offset_x,
 
     vTaskDelay(10 / portTICK_PERIOD_MS);
     //required when changing resolution
+    ESP_LOGI(TAG, "Set PIXFORMAT: %d", sensor->pixformat);
     set_pixformat(sensor, sensor->pixformat);
 
+    ESP_LOGI(TAG, "set_window RESULT: %d", ret);
     return ret;
 }
 

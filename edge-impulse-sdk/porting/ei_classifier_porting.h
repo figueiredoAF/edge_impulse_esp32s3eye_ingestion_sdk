@@ -18,9 +18,14 @@
 #ifndef _EI_CLASSIFIER_PORTING_H_
 #define _EI_CLASSIFIER_PORTING_H_
 
+#include "sdkconfig.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include "edge-impulse-sdk/tensorflow/lite/micro/debug_log.h"
+
+#if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(CONFIG_IDF_TARGET_ESP32)
+#define EI_PORTING_ESPRESSIF      1
+#endif
 
 #if defined(__cplusplus) && EI_C_LINKAGE == 1
 extern "C" {

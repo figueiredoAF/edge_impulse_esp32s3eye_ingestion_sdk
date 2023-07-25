@@ -1,5 +1,3 @@
-#include "edge-impulse-sdk/classifier/ei_classifier_config.h"
-#if EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN
 // Copyright 2020-2021 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <edge-impulse-sdk/porting/espressif/ESP-NN/include/esp_nn_defs.h>
-#include <edge-impulse-sdk/porting/espressif/ESP-NN/src/common/common_functions.h>
+#include <esp_nn_defs.h>
+#include <common_functions.h>
 
 int esp_nn_get_depthwise_conv_scratch_size_opt(const data_dims_t *input_dims,
                                                const data_dims_t *filter_dims,
@@ -291,5 +289,3 @@ void esp_nn_depthwise_conv_s8_opt(const data_dims_t *input_dims,
         }
     }
 }
-
-#endif // EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN

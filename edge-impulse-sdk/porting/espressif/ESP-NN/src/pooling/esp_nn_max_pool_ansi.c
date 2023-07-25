@@ -1,5 +1,3 @@
-#include "edge-impulse-sdk/classifier/ei_classifier_config.h"
-#if EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN
 // Copyright 2020-2021 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +14,7 @@
 
 #include <stdint.h>
 
-#include <edge-impulse-sdk/porting/espressif/ESP-NN/src/common/common_functions.h>
+#include <common_functions.h>
 
 void esp_nn_max_pool_s8_ansi(const int8_t *input,
                              const uint16_t input_wd,
@@ -66,5 +64,3 @@ void esp_nn_max_pool_s8_ansi(const int8_t *input,
         }
     }
 }
-
-#endif // EI_CLASSIFIER_TFLITE_ENABLE_ESP_NN

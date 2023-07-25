@@ -435,6 +435,9 @@ bool at_take_snapshot(const char **argv, const int argc)
 
 bool at_snapshot_stream(const char **argv, const int argc)
 {
+    // DEBUG
+    ei_printf("[at_snapshot_stream] START \n");
+
     uint32_t width, height;
     bool use_max_baudrate = false;
 
@@ -445,16 +448,18 @@ bool at_snapshot_stream(const char **argv, const int argc)
     width = atoi(argv[0]);
     height = atoi(argv[1]);
 
+    // DEBUG
+    ei_printf("at_snapshot_stream - width=%u | height=%u \n", width, height);
+
     if (argc >= 3 && argv[2][0] == 'y') {
         use_max_baudrate = true;
     }
 
-    if (ei_camera_start_snapshot_stream(width, height, use_max_baudrate) == false) {
-        return true;
-    }
+    // DEBUG
+    ei_printf("at_snapshot_stream - END");
 
     // we do not print a new prompt!
-    return false;
+    return ei_camera_start_snapshot_stream(width, height, use_max_baudrate);
 }
 
 bool at_get_config(void)
